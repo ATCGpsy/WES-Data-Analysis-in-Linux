@@ -1,0 +1,29 @@
+#Utilizing gatk package for variant calling
+
+gatk HaplotypeCaller -I recal.bam -O var.vcf.gz -R reference genome #or absolute address -D dbsnp.hg19.vcf
+
+
+#VQSR
+#this stage contains train set and test set and will be performed on SNPs and Indels
+#db= database
+
+gatk VariantRecalibrator -R #reference genome or address -mode SNP #or INDEL -V VCF #or abslute address
+--resource: hapmap,known=false, training=true, truth= true, prior= 15.0 #database address
+--resource: omni, known=false, training=true, truth= false, prior= 12.0 #database address
+--resource: 1000G, #database address --resource: dbsnp, known=false, training=true, truth= false, prior= 10.0
+-tranch 99.5 -an QD -an MQ -an MQRankSum -an.ReadPosRankSum -an FS -an SOR -O recal_snp.recal --tranches-file  recal_snp.tranches 
+--rscript_file recalibrator_snp_plots.R
+
+    gatk ApplyVQSR -R #reference genome -mode SNP-V #vcf file -ts-filter-level 99.0 --recal-file recal_snp.recal --tranches_file recal_snp.tranches -O recal_snp_raw_indels.vcf.gz
+
+      gatk VariantRecalibrator -R #reference genome or address -mode INDEL -V recal_snp_raw_indels.vcf.gz #or abslute address
+--resource: mills,known=false, training=true, truth= true, prior= 12.0 #database address
+--resource: dbsnp, known=true, training=true, truth= false, prior= 2.0 #database address
+-tranch 99.5 -an QD -an MQ -an MQRankSum -an.ReadPosRankSum -an FS -an SOR -O recal_indel.recal --tranches-file  recal_indel.tranches 
+--rscript_file recalibrator_snp_plots.R --max-gaussians
+
+            gatk ApplyVQSR -R #reference genome -mode INDEL-V #vcf file -ts-filter-level 99.0 --recal-file recal_indel.recal --tranches_file recal_indel.tranches -O recal_var.vcf.gz
+
+
+
+
