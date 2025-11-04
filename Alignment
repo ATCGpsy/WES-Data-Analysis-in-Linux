@@ -1,0 +1,5 @@
+#Performing alignment of reads with reference genome using bwa package
+
+bwa mem -M <idx base> (reference genome absolute address) <in1.fq> (inpute address) [in2.fq] (inpute2 address) > test.sam (output)
+
+samtools view -b input.sam (test.sam) > output.bam (test.bam)
