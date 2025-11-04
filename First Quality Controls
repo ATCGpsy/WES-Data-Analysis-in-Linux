@@ -1,0 +1,7 @@
+#Performing quality control of our reads using graphical summeries for pair-end reads
+
+IlluQC.pl -pe input1 (location of input 1) input2 (address of input 2) N A -l 70 -s 20 -P 1 -t 1 -O (address for output) -z g 
+
+fastqc seqfile1 (absolute or local address) seqfile2 seqfile N -O (address) 
+
+cutadapt -a adapt1 -a adapt2  -a .... -A adapt1 -A adapt2 .... -e 0.01 -m 15 -O (address) -P (address for pairedEnd2) inpute address or input
