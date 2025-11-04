@@ -1,0 +1,4 @@
+
+
+Perl  #vcf file.gz  #or absolute address #absolute address od annotation files -buildver hg19 -out #patient's code --protpcol #genebase,Rbase and filterbase databases  --operation g,r,f -thread 1
+--polish --otherinfo --csvout #or --vcfinput
