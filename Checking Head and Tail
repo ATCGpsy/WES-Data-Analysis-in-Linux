@@ -1,0 +1,5 @@
+#This checks the integrity of our sequencing by ensuring our file (raw sequencing data) is intact at both start and end side and is suitable for downstrean analysis.
+
+
+head -n 4 file
+tail -n 4 file 
