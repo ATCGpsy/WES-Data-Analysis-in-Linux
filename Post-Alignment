@@ -1,0 +1,15 @@
+#Utilizing Picartools package for phase 1 of post-alignment
+
+picard-tools SortSam I= input address O= iutput address/test-s,bam SO= coordinate 
+    picard-tools MarkDuplicates I= test-s.bam O= output address/test-s-d.bam M= directory name #directory name (for saving duplications) REMOVE_DUPLICATES= true AS= true 
+        picard-tools AddOrReplaceReadGroups I= test-s-d.bam O= test-s-d-RG.bam LB= library name SM= code of sample PL= Illumina 6000 PU= Novoseq 6000 #platform unit CN= Macrogene #Center's name
+             picard-tools BuildBamIndex  I= test-s-d-RG.bam O= test-s-d-RG.bam.bai #or absolute address of the file
+
+
+#Utilizing gatk package for phase 2 pf post- alignment
+
+gatk BaseRecalibrator -R reference genome #or absolute address  -I RG.bam #plus index file  --known-sites (address) -O beforerecal.table
+    gatk ApplyBQSR -R reference genome -I RG.bam #address -bqsr beforerecalt1.table -O recal.bam 
+        gatk BaseRecalibrator -R reference genome #or absolute address  -I recal.bam --known-sites #address -O afterrecalt1.table
+            gatk AnalyseCovariates -before -beforerecalt1.table -after afterrecal.table  -plots recal_plots -s=csv recal.csv
+                
